@@ -1,0 +1,87 @@
+import java.util.Scanner;
+
+public class ActionPlanner {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String[] tasks = new String[100]; //size of array is 100
+        boolean[] taskCompleted = new boolean[100];
+        int taskCount = 0;
+
+        while (true) {
+            System.out.println("Regular Tasks Manager");
+            System.out.println("1. Add Task");
+            System.out.println("2. Mark Task as Completed");
+            System.out.println("3. View % of Tasks Completed");
+            System.out.println("4. Delete Task");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter the task for the day: ");
+                    String task = scanner.nextLine();
+                    tasks[taskCount] = task;
+                    taskCount++;
+                    break;
+                case 2:
+                    System.out.print("Enter the task you completed: ");
+                    String completedTask = scanner.nextLine();
+                    boolean found = false;
+                    for (int i = 0; i < taskCount; i++) {
+                        if (completedTask.equals(tasks[i]) && !taskCompleted[i]) {
+                            taskCompleted[i] = true;
+                            found = true;
+                            System.out.println("Task marked as completed.");
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Task not found or already completed.");
+                    }
+                    break;
+                case 3:
+                    int completedCount = 0;
+                    for (int i = 0; i < taskCount; i++) {
+                        if (taskCompleted[i]) {
+                            completedCount++;
+                        }
+                    }
+                    double percentageCompleted = (double) completedCount / taskCount * 100;
+                    System.out.printf("Percentage of tasks completed: %.2f%%\n", percentageCompleted);
+                    break;
+                case 4:
+                    System.out.print("Enter the task to delete: ");
+                    String taskToDelete = scanner.nextLine();
+                    boolean deleted = false;
+                    for (int i = 0; i < taskCount; i++) {
+                        if (taskToDelete.equals(tasks[i])) {
+                            taskCount--;
+                            for (int j = i; j < taskCount; j++) {
+                                tasks[j] = tasks[j + 1];
+                                taskCompleted[j] = taskCompleted[j + 1];
+                            }
+                            tasks[taskCount] = null;
+                            taskCompleted[taskCount] = false;
+                            deleted = true;
+                            System.out.println("Task deleted.");
+                            break;
+                        }
+                    }
+                    if (!deleted) {
+                        System.out.println("Task not found.");
+                    }
+                    break;
+                case 5:
+                    System.out.println("Exiting action planner.");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
